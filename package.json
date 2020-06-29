@@ -18,6 +18,8 @@
     "@babel/preset-react": "^7.8.3",
     "@babel/preset-typescript": "^7.8.3",
     "@types/lodash": "^4.14.155",
+    "@types/react": "^16.9.41",
+    "@types/styled-components": "^5.1.0",
     "babel-loader": "^8.0.6",
     "file-loader": "^6.0.0",
     "ts-loader": "^7.0.5",
@@ -28,6 +30,10 @@
   },
   "dependencies": {
     "etch": "^0.14.0",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.15",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-icons": "^3.10.0",
+    "styled-components": "^5.1.1"
   }
 }
