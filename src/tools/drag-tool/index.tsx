@@ -21,7 +21,7 @@ export default class DragTool {
   handleDrag = ({ x, y }: Point) => {
     if (this.tools.active === 'drag') {
       this.state.offset.x += x
-      this.state.offset.y += y // * this.state.zoom
+      this.state.offset.y += y 
     }
   }
 

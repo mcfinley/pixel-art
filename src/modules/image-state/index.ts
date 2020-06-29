@@ -2,7 +2,6 @@ import CoreModule from '../core-module'
 
 import { Point } from '../advanced-events'
 
-// export type Point = { x: number, y: number }
 export type Color = { r: number, g: number, b: number }
 export type Pixel = { position: Point, color: Color }
 
@@ -10,8 +9,7 @@ const GRID_COLOR = `#ccc`
 
 export default class ImageState {
   pixels: Pixel[] = [
-    { position: { x: 0, y: 0 }, color: { r: 255, g: 255, b: 0 }},
-    // { position: { x: 2, y: 0 }, color: { r: 255, g: 255, b: 0 }},
+    // { position: { x: 0, y: 0 }, color: { r: 255, g: 255, b: 0 }},
   ]
   public zoom: number = 10 /* How many real pixels fit in image pixel */
   public offset: Point = { x: 50, y: 120 }
@@ -22,7 +20,6 @@ export default class ImageState {
 
   renderImage = (context: CanvasRenderingContext2D) => {
     /* Render the grid */
-
     const { width, height } = this.core.rect
     const verticalLinesCount = Math.ceil(width / this.zoom) + 1
     const horizontalLinesCount = Math.ceil(height / this.zoom) + 1
@@ -47,7 +44,6 @@ export default class ImageState {
     }
 
     /* Render pixels */
-
     context.translate(this.offset.x, this.offset.y)
 
     this.pixels.forEach(({ position, color }) => {

@@ -8,29 +8,6 @@ import Palette from './Palette'
 
 export type ToolView = { icon: React.ReactNode, id: string }
 
-/*
-
-  connect(() => ({
-    active: this.active,
-    onChange: () => this.
-  }))(Palette)
-
-*/
-
-// const connect = (propsResolver) => (Component) => class extends React.PureComponent {
-//   resolvedProps: any
-//
-//   constructor (props) {
-//     super(props)
-//
-//     this.resolvedProps = propsResolver()
-//   }
-//
-//   render () {
-//     return <Component {...this.resolvedProps} />
-//   }
-// }
-
 export default class ToolsPalette {
   public onInitTools = new EventEmitter<void>()
   public active: string | null = 'drag'
@@ -44,22 +21,6 @@ export default class ToolsPalette {
     node.appendChild(paletteHost)
 
     const tools = this.onInitTools.emitParallelSync() as ToolView[]
-
-
-
-    // const palette = new Palette({
-    //   tools, active: this.active, onChange: (tool) => {
-    //     this.active = tool
-    //     palette.forceUpdate()
-    //   }
-    // })
-
-    // (tool) => {
-    //   this.active = tool
-    //   // palette.props.active = this.active
-    //   // palette.setActive()
-    //   palette.forceUpdate()
-    // }
 
     const updateTool = (tool: string) => {
       this.active = tool
