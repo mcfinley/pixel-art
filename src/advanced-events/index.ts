@@ -1,6 +1,6 @@
 import { EventEmitter } from '../utils/events'
 
-import HtmlBasement from '../html-basement'
+// import HtmlBasement from '../html-basement'
 
 export type Point = { x: number, y: number }
 
@@ -20,7 +20,7 @@ export default class AdvancedEvents {
   lastmousepos: Point | null = null
   mousepressed = false
 
-  constructor (private html: HtmlBasement) {
+  constructor (private html: any) {
     this.html.root.addEventListener('mousedown', (e) => {
       const { clientX: x, clientY: y } = e
 
