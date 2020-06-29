@@ -1,6 +1,8 @@
 import CoreModule from '../core-module'
 
-export type Point = { x: number, y: number }
+import { Point } from '../advanced-events'
+
+// export type Point = { x: number, y: number }
 export type Color = { r: number, g: number, b: number }
 export type Pixel = { position: Point, color: Color }
 
@@ -8,11 +10,11 @@ const GRID_COLOR = `#ccc`
 
 export default class ImageState {
   pixels: Pixel[] = [
-    // { position: { x: 0, y: 0 }, color: { r: 255, g: 0, b: 0 }},
+    { position: { x: 0, y: 0 }, color: { r: 255, g: 255, b: 0 }},
     // { position: { x: 2, y: 0 }, color: { r: 255, g: 255, b: 0 }},
   ]
-  zoom: number = 100 /* How many real pixels fit in image pixel */
-  offset: Point = { x: 50, y: 120 }
+  public zoom: number = 10 /* How many real pixels fit in image pixel */
+  public offset: Point = { x: 50, y: 120 }
 
   constructor (private core: CoreModule) {
     this.core.onRender.subscribe(this.renderImage)
@@ -27,7 +29,7 @@ export default class ImageState {
     const firstVerticalLineOffset = this.offset.x % this.zoom
     const firstHorizontalLineOffset = this.offset.y % this.zoom
 
-    context.lineWidth = 1
+    context.lineWidth = 0.7
     context.strokeStyle = GRID_COLOR
 
     for (let x = 0; x < verticalLinesCount; ++x) {

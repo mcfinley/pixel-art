@@ -2,7 +2,7 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 import { IconContext } from 'react-icons';
 
-import { Tool } from '..'
+import { ToolView } from '..'
 
 const LeftSideContainer = styled.div`
   position: absolute;
@@ -40,7 +40,7 @@ const Tool = styled.div`
   `}
 ` as any
 
-type Props = { tools: Tool[], active: string | null, onChange: (tool: string) => void }
+type Props = { tools: ToolView[], active: string | null, onChange: (tool: string) => void }
 
 export default class Palette extends React.PureComponent<Props> {
   render () {

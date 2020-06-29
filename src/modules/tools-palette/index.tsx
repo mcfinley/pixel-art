@@ -6,7 +6,7 @@ import { EventEmitter } from '../../utils/events'
 
 import Palette from './Palette'
 
-export type Tool = { icon: React.ReactNode, id: string }
+export type ToolView = { icon: React.ReactNode, id: string }
 
 /*
 
@@ -17,19 +17,19 @@ export type Tool = { icon: React.ReactNode, id: string }
 
 */
 
-const connect = (propsResolver) => (Component) => class extends React.PureComponent {
-  resolvedProps: any
-
-  constructor (props) {
-    super(props)
-
-    this.resolvedProps = propsResolver()
-  }
-
-  render () {
-    return <Component {...this.resolvedProps} />
-  }
-}
+// const connect = (propsResolver) => (Component) => class extends React.PureComponent {
+//   resolvedProps: any
+//
+//   constructor (props) {
+//     super(props)
+//
+//     this.resolvedProps = propsResolver()
+//   }
+//
+//   render () {
+//     return <Component {...this.resolvedProps} />
+//   }
+// }
 
 export default class ToolsPalette {
   public onInitTools = new EventEmitter<void>()
@@ -43,7 +43,10 @@ export default class ToolsPalette {
     const paletteHost = document.createElement('div')
     node.appendChild(paletteHost)
 
-    const tools = this.onInitTools.emitParallelSync() as Tool[]
+    const tools = this.onInitTools.emitParallelSync() as ToolView[]
+
+
+
     // const palette = new Palette({
     //   tools, active: this.active, onChange: (tool) => {
     //     this.active = tool
@@ -51,20 +54,28 @@ export default class ToolsPalette {
     //   }
     // })
 
+    // (tool) => {
+    //   this.active = tool
+    //   // palette.props.active = this.active
+    //   // palette.setActive()
+    //   palette.forceUpdate()
+    // }
 
-    let palette: Palette
+    const updateTool = (tool: string) => {
+      this.active = tool
+      rerender()
+    }
 
-    ReactDOM.render((
-      <Palette
-        tools={tools}
-        active={this.active}
-        onChange={(tool) => {
-          this.active = tool
-          // palette.props.active = this.active
-          palette.setActive()
-        }}
-        ref={(node) => palette = node}
-      />
-    ), paletteHost)
+    let rerender = () => {
+      ReactDOM.render((
+        <Palette
+          tools={tools}
+          active={this.active}
+          onChange={updateTool}
+        />
+      ), paletteHost)
+    }
+
+    rerender()
   }
 }

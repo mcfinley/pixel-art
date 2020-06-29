@@ -2,6 +2,8 @@ import { EventEmitter } from '../../utils/events'
 
 export type Rect = { width: number, height: number }
 
+const RESOLUTION_FACTOR = 2
+
 /**
  * Core Module plugin initializes html node, creats canvas and sets up rendering cycle
  */
@@ -23,12 +25,13 @@ export default class CoreModule {
 
     this.canvas.style.width = this.rect.width + 'px'
     this.canvas.style.height = this.rect.height + 'px'
-    this.canvas.width = this.rect.width
-    this.canvas.height = this.rect.height
+    this.canvas.width = this.rect.width * RESOLUTION_FACTOR
+    this.canvas.height = this.rect.height * RESOLUTION_FACTOR
 
     this.root.appendChild(this.canvas)
 
     this.context = this.canvas.getContext('2d')
+    this.context.scale(RESOLUTION_FACTOR, RESOLUTION_FACTOR)
 
     requestAnimationFrame(this.render)
 
@@ -54,11 +57,10 @@ export default class CoreModule {
    * Constantly rerender the canvas on the background
    */
   render = () => {
-    this.context.clearRect(0, 0, this.rect.width, this.rect.height)
-
+    this.context.clearRect(0, 0, Math.max(this.rect.width, this.rect.width * RESOLUTION_FACTOR), Math.max(this.rect.height, this.rect.height * RESOLUTION_FACTOR))
     /* Emit render (other modules can put code here ) */
     this.onRender.emitSync(this.context)
-
+    // this.context.scale(1 / RESOLUTION_FACTOR, 1 / RESOLUTION_FACTOR)
     requestAnimationFrame(this.render)
   }
 }
