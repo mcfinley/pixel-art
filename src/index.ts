@@ -10,7 +10,7 @@ import AdvancedEvents from './modules/advanced-events'
 import DragTool from './tools/drag-tool'
 import DrawTool from './tools/draw-tool'
 
-document.addEventListener('DOMContentLoaded', (e) => {
+document.addEventListener('DOMContentLoaded', () => {
   const root = document.getElementById('app')
 
   const core = new CoreModule(root)
