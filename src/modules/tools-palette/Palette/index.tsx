@@ -3,19 +3,14 @@ import styled, { css } from 'styled-components'
 import { IconContext } from 'react-icons';
 
 import { ToolView } from '..'
+import Card from '../../../components/elements/Card'
+import ColorPicker from '../../../components/molecules/ColorPicker'
 
 const LeftSideContainer = styled.div`
   position: absolute;
   left: 0;
   top: 50%;
   transform: tranlsateY(-50%);
-`
-
-const Card = styled.div`
-  background: white;
-  border-radius: 5px;
-  box-shadow: 0 0 4px 4px rgba(0, 0, 0, .1);
-  overflow: hidden;
 `
 
 const Tools = styled.div`
@@ -40,6 +35,19 @@ const Tool = styled.div`
   `}
 ` as any
 
+const ColorPickerArea = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+`
+
+const ColorPickerWrap = styled.div`
+  width: 40px;
+  height: 40px;
+`
+
 type Props = { tools: ToolView[], active: string | null, onChange: (tool: string) => void }
 
 export default class Palette extends React.PureComponent<Props> {
@@ -56,6 +64,12 @@ export default class Palette extends React.PureComponent<Props> {
               ))}
             </IconContext.Provider>
           </Tools>
+
+          <ColorPickerArea>
+            <ColorPickerWrap>
+              <ColorPicker />
+            </ColorPickerWrap>
+          </ColorPickerArea>
         </Card>
       </LeftSideContainer>
     )
