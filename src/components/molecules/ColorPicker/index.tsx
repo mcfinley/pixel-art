@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import DialogOverlay from '../DialogOverlay'
 import Card from '../../elements/Card'
 
+import { hslToRgb } from '../../../utils/colors'
+
 const ColorSquare = styled.div`
   width: 100%;
   height: 100%;
@@ -108,7 +110,7 @@ export default class ColorPicker extends React.PureComponent<Props, State> {
 
   fillHue = (context: CanvasRenderingContext2D, width: number, height: number) => {
     for (let x = 0; x <= width; ++x) {
-      const value = Math.floor((x / width) * 256)
+      const value = Math.floor((x / width) * 360)
 
       context.beginPath()
       context.moveTo(x, 0)
@@ -119,20 +121,20 @@ export default class ColorPicker extends React.PureComponent<Props, State> {
   }
 
   fillRest = (value: number) => (context: CanvasRenderingContext2D, width: number, height: number) => {
-    // console.log(width, height)
     const imageData = context.createImageData(width * 2, height * 2)
+    
     for (let x = 0; x < width * 2; ++x) {
       for (let y = 0; y < height * 2; ++y) {
-        const h = value / 256
+        const h = value
         const s = x / width
         const l = 1 - ((y / height) / 2)
 
-        const { r, g, b, a } = hslToRgba({ h, s, l })
+        const { r, g, b } = hslToRgb({ h, s, l })
 
         imageData.data[(x + y * width * 2) * 4 + 0] = r
         imageData.data[(x + y * width * 2) * 4 + 1] = g
         imageData.data[(x + y * width * 2) * 4 + 2] = b
-        imageData.data[(x + y * width * 2) * 4 + 3] = a
+        imageData.data[(x + y * width * 2) * 4 + 3] = 255
       }
     }
 
@@ -157,7 +159,7 @@ export default class ColorPicker extends React.PureComponent<Props, State> {
               </div>
 
               <div style={{ width: '100%', height: '100px' }}>
-                <PrefilledCanvas fillPredicate={this.fillRest(160)} />
+                <PrefilledCanvas fillPredicate={this.fillRest(1)} />
               </div>
 
               <div style={{ padding: 20 }}>
