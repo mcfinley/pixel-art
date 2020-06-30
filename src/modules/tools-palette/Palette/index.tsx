@@ -18,12 +18,12 @@ const Tools = styled.div`
   align-items: flex-start;
   flex-direciton: column;
   flex-wrap: wrap;
-  width: 102px;
+  width: 68px;
 `
 
 const Tool = styled.div`
-  width: calc(50% - 24px);
-  padding: 12px;
+  width: calc(50% - 12px);
+  padding: 6px;
   cursor: pointer;
 
   &:hover {
@@ -40,23 +40,25 @@ const ColorPickerArea = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px 0;
+  padding: 10px 0;
 `
 
 const ColorPickerWrap = styled.div`
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
 `
 
-type Props = { tools: ToolView[], active: string | null, onChange: (tool: string) => void }
+type Props = { tools: ToolView[], active: string | null, onChange: (tool: string) => void, onChangeColor: any }
 
 export default class Palette extends React.PureComponent<Props> {
+  pickColor = (v) => this.props.onChangeColor(v)
+
   render () {
     return (
       <LeftSideContainer>
         <Card style={{ marginLeft: 12 }}>
           <Tools>
-            <IconContext.Provider value={{ color: '#069', size: '24px' }}>
+            <IconContext.Provider value={{ color: '#069', size: '20px' }}>
               {this.props.tools.map((tool) => (
                 <Tool key={tool.id} active={tool.id === this.props.active} onClick={() => this.props.onChange(tool.id)}>
                   {tool.icon}
@@ -67,7 +69,7 @@ export default class Palette extends React.PureComponent<Props> {
 
           <ColorPickerArea>
             <ColorPickerWrap>
-              <ColorPicker />
+              <ColorPicker onChange={this.pickColor} />
             </ColorPickerWrap>
           </ColorPickerArea>
         </Card>

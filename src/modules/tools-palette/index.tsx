@@ -11,6 +11,7 @@ export type ToolView = { icon: React.ReactNode, id: string }
 export default class ToolsPalette {
   public onInitTools = new EventEmitter<void>()
   public active: string | null = 'drag'
+  public color: number | null = 20
 
   constructor (private core: CoreModule) {
     this.core.onInitInterface.subscribe(this.initPalette)
@@ -27,12 +28,18 @@ export default class ToolsPalette {
       rerender()
     }
 
+    const updateColor = (color: number) => {
+      this.color = color
+      rerender()
+    }
+
     let rerender = () => {
       ReactDOM.render((
         <Palette
           tools={tools}
           active={this.active}
           onChange={updateTool}
+          onChangeColor={updateColor}
         />
       ), paletteHost)
     }
