@@ -1,9 +1,9 @@
 import React from 'react'
 import { MdBrush } from 'react-icons/md'
 
-import ImageState from '../../modules/image-state'
-import ToolsPalette from '../../modules/tools-palette'
-import AdvancedEvents, { Point } from '../../modules/advanced-events'
+import ImageState from '../../../modules/core/image-state'
+import ToolsPalette from '../../../modules/core/tools-palette'
+import AdvancedEvents, { Point } from '../../../modules/core/advanced-events'
 
 export type Line = { from: Point, to: Point }
 
@@ -36,7 +36,10 @@ export default class DragTool {
   handleMouseMove = (p: Point) => {
     if (this.drawing) {
       /* Build a line of all pixels between */
-      pixelizeLine({ from: this.lastpos, to: p }).forEach((p) => this.colorPixel(p))
+      if (this.lastpos) {
+        pixelizeLine({ from: this.lastpos, to: p }).forEach((p) => this.colorPixel(p))
+      }
+
       this.lastpos = p
     }
   }

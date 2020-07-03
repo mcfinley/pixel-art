@@ -1,14 +1,18 @@
 import './index.html'
 
-import CoreModule from './modules/core-module'
-import ImageState from './modules/image-state'
-import ToolsPalette from './modules/tools-palette'
-import AdvancedEvents from './modules/advanced-events'
+import CoreModule from './modules/core/core-module'
+import ImageState from './modules/core/image-state'
+import ToolsPalette from './modules/core/tools-palette'
+import AdvancedEvents from './modules/core/advanced-events'
 
 /* Import tools */
 
-import DragTool from './tools/drag-tool'
-import DrawTool from './tools/draw-tool'
+import DragTool from './modules/tools/drag-tool'
+import DrawTool from './modules/tools/draw-tool'
+
+/* Import miscellaneous stuff */
+
+import HelloUser from './modules/miscellaneous/hello-user'
 
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.getElementById('app')
@@ -24,5 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const dragTool = new DragTool(tools, events, state)
   const drawTool = new DrawTool(tools, events, state)
+
+  const hello = new HelloUser(core)
 })
 

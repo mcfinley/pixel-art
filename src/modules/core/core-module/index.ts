@@ -1,4 +1,4 @@
-import { EventEmitter } from '../../utils/events'
+import { EventEmitter } from '../../../utils/events'
 
 export type Rect = { width: number, height: number }
 

@@ -3,9 +3,9 @@ import styled, { css } from 'styled-components'
 import { IconContext } from 'react-icons';
 
 import { ToolView } from '..'
-import { RGBAColor } from '../../../utils/colors'
-import Card from '../../../components/elements/Card'
-import ColorPicker from '../../../components/molecules/ColorPicker'
+import { RGBAColor } from '../../../../utils/colors'
+import Card from '../../../../components/elements/Card'
+import ColorPicker from '../../../../components/molecules/ColorPicker'
 
 const LeftSideContainer = styled.div`
   position: absolute;
@@ -19,13 +19,19 @@ const Tools = styled.div`
   align-items: flex-start;
   flex-direciton: column;
   flex-wrap: wrap;
-  width: 68px;
+  width: 76px;
 `
 
 const Tool = styled.div`
-  width: calc(50% - 12px);
-  padding: 6px;
+
+  width: 30px;
+  height: 30px;
   cursor: pointer;
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 4px;
 
   &:hover {
     background: #eee;
@@ -59,11 +65,12 @@ type Props = {
 
 export default class Palette extends React.PureComponent<Props> {
   pickColor = (v) => this.props.onChangeColor(v)
+  stopPropagation = (e) => { e.prefentDefault(); e.stopPropagation(); e.nativeEvent.stopPropagation(); }
 
   render () {
     return (
-      <LeftSideContainer>
-        <Card style={{ marginLeft: 12 }}>
+      <LeftSideContainer onClick={this.stopPropagation}>
+        <Card style={{ marginLeft: 12, padding: '12px 6px' }}>
           <Tools>
             <IconContext.Provider value={{ color: '#069', size: '20px' }}>
               {this.props.tools.map((tool) => (

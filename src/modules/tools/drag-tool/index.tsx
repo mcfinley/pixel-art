@@ -1,9 +1,9 @@
 import React from 'react'
 import { MdZoomOutMap } from 'react-icons/md'
 
-import ImageState from '../../modules/image-state'
-import ToolsPalette from '../../modules/tools-palette'
-import AdvancedEvents, { Point } from '../../modules/advanced-events'
+import ImageState from '../../../modules/core/image-state'
+import ToolsPalette from '../../../modules/core/tools-palette'
+import AdvancedEvents, { Point } from '../../../modules/core/advanced-events'
 
 /**
  * Dragging tool uses advanced events to change offset and zoom
