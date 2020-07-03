@@ -30,7 +30,14 @@ export default class CoreModule {
 
     this.root.appendChild(this.canvas)
 
-    this.context = this.canvas.getContext('2d')
+    const unsafeContext = this.canvas.getContext('2d')
+
+    if (!unsafeContext) {
+      alert('There was an error trying to get 2d context from canvas')
+      throw new Error('context not retreivable')
+    }
+
+    this.context = unsafeContext
     this.context.scale(RESOLUTION_FACTOR, RESOLUTION_FACTOR)
 
     requestAnimationFrame(this.render)
@@ -48,9 +55,7 @@ export default class CoreModule {
 
     this.root.appendChild(this.interface)
 
-    setTimeout(() => {
-      this.onInitInterface.emitSync(this.interface)
-    }, 0)
+    setTimeout(() => this.onInitInterface.emitSync(this.interface), 0)
   }
 
   /**

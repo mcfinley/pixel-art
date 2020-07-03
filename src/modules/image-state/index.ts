@@ -1,25 +1,27 @@
 import CoreModule from '../core-module'
 
 import { Point } from '../advanced-events'
+import { RGBColor, rgbToHex } from '../../utils/colors'
 
-export type Color = { r: number, g: number, b: number }
-export type Pixel = { position: Point, color: Color }
+export type Pixel = { position: Point, color: RGBColor }
 
 const GRID_COLOR = `#ccc`
 
 export default class ImageState {
-  pixels: Pixel[] = [
-    // { position: { x: 0, y: 0 }, color: { r: 255, g: 255, b: 0 }},
-  ]
   public zoom: number = 10 /* How many real pixels fit in image pixel */
   public offset: Point = { x: 50, y: 120 }
+
+  /* Allow manupilating pixels directly TODO fix that */
+  public pixels: Pixel[] = []
 
   constructor (private core: CoreModule) {
     this.core.onRender.subscribe(this.renderImage)
   }
 
   renderImage = (context: CanvasRenderingContext2D) => {
-    /* Render the grid */
+    /**
+     * Render the grid
+     */
     const { width, height } = this.core.rect
     const verticalLinesCount = Math.ceil(width / this.zoom) + 1
     const horizontalLinesCount = Math.ceil(height / this.zoom) + 1
@@ -43,20 +45,18 @@ export default class ImageState {
       context.stroke()
     }
 
-    /* Render pixels */
+    /**
+     * Render pixels // TODO make it a put image data
+     */
     context.translate(this.offset.x, this.offset.y)
 
     this.pixels.forEach(({ position, color }) => {
       context.beginPath()
       context.rect(position.x * this.zoom, position.y * this.zoom, this.zoom, this.zoom)
-      context.fillStyle = colorToString(color)
+      context.fillStyle = rgbToHex(color)
       context.fill()
     })
 
     context.translate(-this.offset.x, -this.offset.y)
   }
 }
-
-/* Helpers */
-
-const colorToString = (color: Color) => `rgb(${color.r},${color.g},${color.b})`

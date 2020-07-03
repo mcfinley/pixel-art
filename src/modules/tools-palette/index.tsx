@@ -1,7 +1,7 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 
 import CoreModule from '../core-module'
+
 import { EventEmitter } from '../../utils/events'
 import { reactize } from '../../utils/reactize'
 import { RGBAColor } from '../../utils/colors'
@@ -12,8 +12,8 @@ export type ToolView = { icon: React.ReactNode, id: string }
 
 export default class ToolsPalette {
   public onInitTools = new EventEmitter<void>()
-  public activeTool: string | null = 'drag'
-  public activeColor: RGBAColor | null = { r: 255, g: 0, b: 0, a: 255 }
+  public activeTool: string = 'drag'
+  public activeColor: RGBAColor = { r: 0, g: 60, b: 90, a: 255 }
 
   constructor (private core: CoreModule) {
     this.core.onInitInterface.subscribe(this.initPalette)

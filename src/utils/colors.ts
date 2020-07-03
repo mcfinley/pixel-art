@@ -101,3 +101,5 @@ const hue2rgb = (p, q, t) => {
 const upTo = (v: string, len: number, prefix: string) => (new Array(Math.ceil(len / prefix.length)).fill(prefix).join('') + v).substr(-len)
 export const rgbaToHex = (rgba: RGBAColor) =>
   `#${upTo(rgba.r.toString(16), 2, '0')}${upTo(rgba.g.toString(16), 2, '0')}${upTo(rgba.b.toString(16), 2, '0')}${upTo(rgba.a.toString(16), 2, '0')}`
+
+export const rgbToHex = (rgb: RGBColor) => rgbaToHex({ ...rgb, a: 255 })

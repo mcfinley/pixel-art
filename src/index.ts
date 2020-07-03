@@ -13,6 +13,10 @@ import DrawTool from './tools/draw-tool'
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.getElementById('app')
 
+  if (!root) {
+    return
+  }
+
   const core = new CoreModule(root)
   const state = new ImageState(core)
   const tools = new ToolsPalette(core)

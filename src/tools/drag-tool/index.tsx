@@ -5,6 +5,9 @@ import ImageState from '../../modules/image-state'
 import ToolsPalette from '../../modules/tools-palette'
 import AdvancedEvents, { Point } from '../../modules/advanced-events'
 
+/**
+ * Dragging tool uses advanced events to change offset and zoom
+ */
 export default class DragTool {
   constructor (
     private tools: ToolsPalette, private events: AdvancedEvents, private state: ImageState
@@ -27,9 +30,13 @@ export default class DragTool {
 
   handleZoom = ({ x, y, delta: _delta }: Point & { delta: number }) => {
     const delta = _delta / 100
-    const changeRatio = ((this.state.zoom + delta) / this.state.zoom) - 1
+    const oldZoomValue = this.state.zoom
 
     this.state.zoom += delta
+    this.state.zoom = Math.max(1, Math.min(100, this.state.zoom))
+
+    const changeRatio = (this.state.zoom / oldZoomValue) - 1
+
     this.state.offset.x += (this.state.offset.x - x) * changeRatio
     this.state.offset.y += (this.state.offset.y - y) * changeRatio
   }
