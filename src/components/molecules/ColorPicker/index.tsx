@@ -27,7 +27,7 @@ type Props = { value: RGBAColor, onChange: (color: RGBAColor) => void }
 type State = { dialog: { open: boolean, x: number, y: number} }
 
 class PrefilledCanvas extends React.PureComponent<any> {
-  canvasRef: HTMLCanvasElement = null
+  canvasRef: HTMLCanvasElement
   assignCanvasRef = (node: HTMLCanvasElement) => this.canvasRef = node
 
   componentDidMount() {
@@ -38,9 +38,10 @@ class PrefilledCanvas extends React.PureComponent<any> {
 
     const context = this.canvasRef.getContext('2d')
 
-    context.scale(2, 2)
-
-    this.props.fillPredicate(context, width, height)
+    if (context) {
+      context.scale(2, 2)
+      this.props.fillPredicate(context, width, height)
+    }      
   }
 
   render () {

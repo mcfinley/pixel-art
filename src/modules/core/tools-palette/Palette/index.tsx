@@ -58,7 +58,7 @@ const ColorPickerWrap = styled.div`
 type Props = {
   tools: ToolView[],
   tool: string | null,
-  color: RGBAColor | null,
+  color: RGBAColor,
   onChangeTool: (tool: string) => void,
   onChangeColor: any
 }

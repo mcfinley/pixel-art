@@ -19,7 +19,7 @@ export default class AdvancedEvents {
   public onKeyDown = new EventEmitter<number>()
   public onKeyUp = new EventEmitter<number>()
 
-  private lastmousepos: Point | null = null
+  private lastmousepos: Point
   private mousepressed = false
 
   constructor (private core: CoreModule) {
