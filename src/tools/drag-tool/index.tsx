@@ -19,9 +19,9 @@ export default class DragTool {
   }
 
   handleDrag = ({ x, y }: Point) => {
-    if (this.tools.active === 'drag') {
+    if (this.tools.activeTool === 'drag') {
       this.state.offset.x += x
-      this.state.offset.y += y 
+      this.state.offset.y += y
     }
   }
 
@@ -38,8 +38,8 @@ export default class DragTool {
   handleKeyDown = (keyCode: number) => {
     if (keyCode === 32) {
       if (this.oldActive === null) {
-        this.oldActive = this.tools.active
-        this.tools.active = 'drag'
+        this.oldActive = this.tools.activeTool
+        this.tools.activeTool = 'drag'
       }
     }
   }
@@ -47,7 +47,7 @@ export default class DragTool {
   handleKeyUp = (keyCode: number) => {
     if (keyCode === 32) {
       if (this.oldActive !== null) {
-        this.tools.active = this.oldActive
+        this.tools.activeTool = this.oldActive
         this.oldActive = null
       }
     }

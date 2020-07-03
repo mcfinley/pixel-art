@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import DialogOverlay from '../DialogOverlay'
 import Card from '../../elements/Card'
 
-import { hslToRgb } from '../../../utils/colors'
+import { RGBAColor, hslToRgb, rgbaToHex, hslaToRgba } from '../../../utils/colors'
 
 const ColorSquare = styled.div`
   width: 100%;
@@ -21,7 +21,9 @@ const ColorSquare = styled.div`
   }
 ` as any
 
-type Props = { onChange: any }
+// console.log(hslaToRgba({ h: .3, s: 1, l: .5, a: 1}))
+
+type Props = { value: RGBAColor, onChange: (color: RGBAColor) => void }
 type State = { dialog: { open: boolean, x: number, y: number} }
 
 class PrefilledCanvas extends React.PureComponent<any> {
@@ -50,55 +52,6 @@ class PrefilledCanvas extends React.PureComponent<any> {
   }
 }
 
-export type HSLColor = { h: number, s: number, l: number }
-export type RGBAColor = { r: number, g: number, b: number, a: number }
-
-function _hslToRgb(h, s, l){
-    var r, g, b;
-
-    if(s == 0){
-        r = g = b = l; // achromatic
-    }else{
-        var hue2rgb = function hue2rgb(p, q, t){
-            if(t < 0) t += 1;
-            if(t > 1) t -= 1;
-            if(t < 1/6) return p + (q - p) * 6 * t;
-            if(t < 1/2) return q;
-            if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
-            return p;
-        }
-
-        var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-        var p = 2 * l - q;
-        r = hue2rgb(p, q, h + 1/3);
-        g = hue2rgb(p, q, h);
-        b = hue2rgb(p, q, h - 1/3);
-    }
-
-    return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
-}
-
-export const hslToRgba = (hslColor: HSLColor) => {
-  const [r,g,b] = _hslToRgb(hslColor.h, hslColor.s, hslColor.l)
-  return { r,g,b,a: 255 }
-}
-
-let setPixelData: ImageData | null = null
-const setPixel = (context: CanvasRenderingContext2D, x: number, y: number, color: RGBAColor) => {
-  setPixelData = setPixelData ? setPixelData : context.createImageData(1, 1)
-
-  if (setPixelData !== null) {
-    setPixelData.data[0] = Math.floor(color.r)
-    setPixelData.data[1] = Math.floor(color.g)
-    setPixelData.data[2] = Math.floor(color.b)
-    setPixelData.data[3] = Math.floor(color.a)
-  }
-
-  console.log('set')
-
-  context.putImageData(setPixelData, x, y)
-}
-
 export default class ColorPicker extends React.PureComponent<Props, State> {
   state = { dialog: { open: false, x: 0, y: 0 } }
 
@@ -122,7 +75,7 @@ export default class ColorPicker extends React.PureComponent<Props, State> {
 
   fillRest = (value: number) => (context: CanvasRenderingContext2D, width: number, height: number) => {
     const imageData = context.createImageData(width * 2, height * 2)
-    
+
     for (let x = 0; x < width * 2; ++x) {
       for (let y = 0; y < height * 2; ++y) {
         const h = value
@@ -142,15 +95,17 @@ export default class ColorPicker extends React.PureComponent<Props, State> {
   }
 
   pickColor = (e) => {
-    this.props.onChange(((e.clientX / 200) * 256) % 256)
+    const rect = e.target.getBoundingClientRect()
+    this.props.onChange(hslaToRgba({ h: (e.clientX - rect.left) / rect.width, s: 1, l: .5, a: 1}))
   }
 
   render () {
+    const { value } = this.props
     const { dialog } = this.state
 
     return (
       <>
-        <ColorSquare color="#069" onClick={this.openDialog} />
+        <ColorSquare color={rgbaToHex(value)} onClick={this.openDialog} />
         {dialog.open && (
           <DialogOverlay x={dialog.x} y={dialog.y} onClose={this.closeDialog}>
             <Card noShadow style={{ width: 200 }}>

@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components'
 import { IconContext } from 'react-icons';
 
 import { ToolView } from '..'
+import { RGBAColor } from '../../../utils/colors'
 import Card from '../../../components/elements/Card'
 import ColorPicker from '../../../components/molecules/ColorPicker'
 
@@ -48,7 +49,13 @@ const ColorPickerWrap = styled.div`
   height: 30px;
 `
 
-type Props = { tools: ToolView[], active: string | null, onChange: (tool: string) => void, onChangeColor: any }
+type Props = {
+  tools: ToolView[],
+  tool: string | null,
+  color: RGBAColor | null,
+  onChangeTool: (tool: string) => void,
+  onChangeColor: any
+}
 
 export default class Palette extends React.PureComponent<Props> {
   pickColor = (v) => this.props.onChangeColor(v)
@@ -60,7 +67,7 @@ export default class Palette extends React.PureComponent<Props> {
           <Tools>
             <IconContext.Provider value={{ color: '#069', size: '20px' }}>
               {this.props.tools.map((tool) => (
-                <Tool key={tool.id} active={tool.id === this.props.active} onClick={() => this.props.onChange(tool.id)}>
+                <Tool key={tool.id} active={tool.id === this.props.tool} onClick={() => this.props.onChangeTool(tool.id)}>
                   {tool.icon}
                 </Tool>
               ))}
@@ -69,7 +76,7 @@ export default class Palette extends React.PureComponent<Props> {
 
           <ColorPickerArea>
             <ColorPickerWrap>
-              <ColorPicker onChange={this.pickColor} />
+              <ColorPicker value={this.props.color} onChange={this.props.onChangeColor} />
             </ColorPickerWrap>
           </ColorPickerArea>
         </Card>

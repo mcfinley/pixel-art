@@ -63,8 +63,8 @@ export const hslaToRgba = (hsla: HSLAColor): RGBAColor => {
   const { h, s, l } = hsla
   let r: number, g: number, b: number
 
-  if (hsla.s === 0) {
-    r = g = b = hsla.l
+  if (s === 0) {
+    r = g = b = l
   } else {
     const q = l < 0.5 ? l * (1 + s) : l + s - l * s
     const p = 2 * l - q
@@ -74,7 +74,7 @@ export const hslaToRgba = (hsla: HSLAColor): RGBAColor => {
     b = hue2rgb(p, q, h - 1/3)
   }
 
-  return { r: Math.floor(r * 256), g: Math.floor(g * 256), b: Math.floor(g * 256), a: Math.floor(hsla.a * 256) }
+  return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255), a: Math.round(hsla.a * 255) }
 }
 
 /**
@@ -96,3 +96,8 @@ const hue2rgb = (p, q, t) => {
  if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
  return p;
 }
+
+/* Format helpers */
+const upTo = (v: string, len: number, prefix: string) => (new Array(Math.ceil(len / prefix.length)).fill(prefix).join('') + v).substr(-len)
+export const rgbaToHex = (rgba: RGBAColor) =>
+  `#${upTo(rgba.r.toString(16), 2, '0')}${upTo(rgba.g.toString(16), 2, '0')}${upTo(rgba.b.toString(16), 2, '0')}${upTo(rgba.a.toString(16), 2, '0')}`
