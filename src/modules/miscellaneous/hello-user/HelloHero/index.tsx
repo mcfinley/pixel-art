@@ -27,7 +27,7 @@ export default () => (
   <Container>
     <Heading>Hi, User 👋</Heading>
     <Paragraph>
-      Welcome to my demo 2D pixel art design tool.{' '}
+      Welcome to demo 2D pixel art design tool.{' '}
       <a href="#">Take a quick tour</a> or{' '}
       <a href="#">Visit project page</a>
     </Paragraph>
