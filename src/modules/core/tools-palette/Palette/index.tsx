@@ -3,9 +3,9 @@ import styled, { css } from 'styled-components'
 import { IconContext } from 'react-icons';
 
 import { ToolView } from '..'
-import { RGBAColor } from '../../../../utils/colors'
-import Card from '../../../../components/elements/Card'
-import ColorPicker from '../../../../components/molecules/ColorPicker'
+import { RGBAColor } from '@/utils/colors'
+import Card from '@/components/elements/Card'
+import ColorPicker from '@/components/molecules/ColorPicker'
 
 const LeftSideContainer = styled.div`
   position: absolute;

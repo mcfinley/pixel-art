@@ -1,8 +1,7 @@
-import { EventEmitter } from '../../../utils/events'
+import { EventEmitter } from '@/utils/events'
+import { Point } from '@/utils/graphic'
 
-import CoreModule from '../core-module'
-
-export type Point = { x: number, y: number }
+import CoreModule from '@/modules/core/core-module'
 
 /**
  * This plugin handles html events and forwards them

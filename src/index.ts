@@ -9,6 +9,7 @@ import AdvancedEvents from './modules/core/advanced-events'
 
 import DragTool from './modules/tools/drag-tool'
 import DrawTool from './modules/tools/draw-tool'
+import EraseTool from './modules/tools/erase-tool'
 
 /* Import miscellaneous stuff */
 
@@ -28,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const dragTool = new DragTool(tools, events, state)
   const drawTool = new DrawTool(tools, events, state)
+  const eraseTool = new EraseTool(tools, events, state)
 
   const hello = new HelloUser(core)
 })

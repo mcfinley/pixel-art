@@ -1,8 +1,8 @@
-import CoreModule from '../core-module'
+import CoreModule from '@/modules/core/core-module'
 
-import { Point } from '../advanced-events'
-import { RGBColor, rgbToHex } from '../../../utils/colors'
-import { AnimatedValue } from '../../../utils/animations'
+import { Point } from '@/utils/graphic'
+import { RGBColor, rgbToHex } from '@/utils/colors'
+import { AnimatedValue } from '@/utils/animations'
 
 export type Pixel = { position: Point, color: RGBColor }
 

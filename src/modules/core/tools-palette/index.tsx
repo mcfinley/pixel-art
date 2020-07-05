@@ -1,10 +1,10 @@
 import React from 'react'
 
-import CoreModule from '../core-module'
+import CoreModule from '@/modules/core/core-module'
 
-import { EventEmitter } from '../../../utils/events'
-import { reactize } from '../../../utils/reactize'
-import { RGBAColor } from '../../../utils/colors'
+import { EventEmitter } from '@/utils/events'
+import { reactize } from '@/utils/reactize'
+import { RGBAColor } from '@/utils/colors'
 
 import Palette from './Palette'
 

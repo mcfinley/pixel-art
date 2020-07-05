@@ -1,8 +1,5 @@
-// import React from 'react'
-
-import CoreModule from '../../core/core-module'
-
-import { reactize } from '../../../utils/reactize'
+import CoreModule from '@/modules/core/core-module'
+import { reactize } from '@/utils/reactize'
 
 import HelloHero from './HelloHero'
 
