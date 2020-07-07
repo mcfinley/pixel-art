@@ -15,11 +15,24 @@ export default class DragTool {
     this.events.onMouseUp.subscribe(this.handleMouseUp)
   }
 
-  colorPixel = (p: Point) => {
-    const x = Math.floor((p.x - this.state.offset.x) / this.state.zoom)
-    const y = Math.floor((p.y - this.state.offset.y) / this.state.zoom)
+  getPixelPosition = (mousePosition: Point) => {
+    const x = Math.floor((mousePosition.x - this.state.offset.x) / this.state.zoom)
+    const y = Math.floor((mousePosition.y - this.state.offset.y) / this.state.zoom)
 
-    this.state.pixels.push({ position: { x, y }, color: this.tools.activeColor })
+    return { x, y }
+  }
+
+  colorPixel = (p: Point) => {
+    this.state.pixels.push({ position: this.getPixelPosition(p), color: this.tools.activeColor })
+  }
+
+  private placeholderPixel: Point | null = null
+  setPlaceholderPixel = (p: Point) => {
+    if (p !== this.placeholderPixel) {
+      this.state.pixels = this.state.pixels.filter(({ tags }) => !(tags || []).includes('draw-placeholder'))
+      this.state.pixels.push({ position: this.getPixelPosition(p), color: { r: 200, g: 200, b: 200 }, tags: ['draw-placeholder'] })
+      this.placeholderPixel = p
+    }
   }
 
   private drawing = false
@@ -41,6 +54,10 @@ export default class DragTool {
       }
 
       this.lastpos = p
+    }
+
+    if (this.tools.activeTool === 'draw') {
+      this.setPlaceholderPixel(p)
     }
   }
 

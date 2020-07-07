@@ -4,7 +4,7 @@ import { Point } from '@/utils/graphic'
 import { RGBColor, rgbToHex } from '@/utils/colors'
 import { AnimatedValue } from '@/utils/animations'
 
-export type Pixel = { position: Point, color: RGBColor }
+export type Pixel = { position: Point, color: RGBColor, tags?: string[] }
 
 const GRID_COLOR = `#dfdfdf`
 
