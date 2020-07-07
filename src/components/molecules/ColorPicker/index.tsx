@@ -25,10 +25,10 @@ const ColorSquare = styled.div`
 // console.log(hslaToRgba({ h: .3, s: 1, l: .5, a: 1}))
 
 type Props = { value: RGBAColor, onChange: (color: RGBAColor) => void }
-type State = { dialog: { open: boolean, x: number, y: number} }
+type State = { dialog: { open: boolean, x: number, y: number }, hue: number }
 
 export default class ColorPicker extends React.PureComponent<Props, State> {
-  state = { dialog: { open: false, x: 0, y: 0 } }
+  state = { dialog: { open: false, x: 0, y: 0 }, hue: 0 }
 
   openDialog = (e) =>
     this.setState({ dialog: { open: true, x: e.clientX + 10, y: e.clientY + 10 } })
@@ -69,9 +69,21 @@ export default class ColorPicker extends React.PureComponent<Props, State> {
     context.putImageData(imageData, 0, 0)
   }
 
+  changeHue = (e) => {
+    const rect = e.target.getBoundingClientRect()
+    const hue = (e.clientX - rect.left) / rect.width
+
+    this.setState({ hue })
+  }
+
   pickColor = (e) => {
     const rect = e.target.getBoundingClientRect()
-    this.props.onChange(hslaToRgba({ h: (e.clientX - rect.left) / rect.width, s: 1, l: .5, a: 1}))
+    const { hue } = this.state
+    const x = (e.clientX - rect.left) / rect.width
+    const y = (e.clientY - rect.top) / rect.height
+
+    // this.setState({ hue })
+    this.props.onChange(hslaToRgba({ h: hue, s: x, l: 1-y, a: 1}))
   }
 
   render () {
@@ -84,17 +96,8 @@ export default class ColorPicker extends React.PureComponent<Props, State> {
         {dialog.open && (
           <DialogOverlay x={dialog.x} y={dialog.y} onClose={this.closeDialog}>
             <Card noShadow style={{ width: 200 }}>
-              <div style={{ width: '100%', height: '30px' }}>
-                <GeneratedCanvas predicate={this.fillHue} onClick={this.pickColor} />
-              </div>
-
-              <div style={{ width: '100%', height: '100px' }}>
-                <GeneratedCanvas predicate={this.fillRest(1)} />
-              </div>
-
-              <div style={{ padding: 20 }}>
-                It works!
-              </div>
+              <GeneratedCanvas style={{ width: '100%', height: '30px' }} predicate={this.fillHue} onClick={this.changeHue} />
+              <GeneratedCanvas key={this.state.hue} style={{ width: '100%', height: '100px' }} predicate={this.fillRest(this.state.hue)} onClick={this.pickColor} />
             </Card>
           </DialogOverlay>
         )}

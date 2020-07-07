@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components'
 
 export default styled.div`
   background: white;
-  border-radius: 12px;
+  border-radius: 8px;
 
   overflow: hidden;
 
