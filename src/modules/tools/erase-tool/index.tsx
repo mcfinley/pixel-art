@@ -3,30 +3,33 @@ import { MdBrush, MdRemoveCircleOutline } from 'react-icons/md'
 
 import { Point, pixelizeLine } from '@/utils/graphic'
 
-import ImageState from '@/modules/core/image-state'
-import ToolsPalette from '@/modules/core/tools-palette'
+import ImageLayers from '@/modules/core/image-layers'
+import ToolsManager from '@/modules/interface/tools-manager'
 import AdvancedEvents from '@/modules/core/advanced-events'
 
 export default class EraseTool {
-  constructor (private tools: ToolsPalette, private events: AdvancedEvents, private state: ImageState) {
-    this.tools.onInitTools.subscribe(() => ({ icon: <MdRemoveCircleOutline />, id: 'erase' }))
+  constructor (private toolsManager: ToolsManager, private events: AdvancedEvents, private layers: ImageLayers) {
+    this.toolsManager.onInitTools.subscribe(() => ({ icon: <MdRemoveCircleOutline />, id: 'erase' }))
+
     this.events.onMouseDown.subscribe(this.handleMouseDown)
     this.events.onMouseMove.subscribe(this.handleMouseMove)
     this.events.onMouseUp.subscribe(this.handleMouseUp)
   }
 
   erasePixel = (mousepos: Point) => {
-    const x = Math.floor((mousepos.x - this.state.offset.x) / this.state.zoom)
-    const y = Math.floor((mousepos.y - this.state.offset.y) / this.state.zoom)
+    const x = Math.floor((mousepos.x - this.layers.offset.x) / this.layers.zoom)
+    const y = Math.floor((mousepos.y - this.layers.offset.y) / this.layers.zoom)
 
-    this.state.pixels = this.state.pixels.filter(({ position: p }) => p.x !== x || p.y !== y)
+    this.layers.updateActiveLayer((layer) => ({
+      ...layer, pixels: layer.pixels.filter(({ position: p }) => p.x !== x || p.y !== y)
+    }))
   }
 
   private drawing = false
   private lastpos: Point | null = null
 
   handleMouseDown = (p: Point) => {
-    if (this.tools.activeTool === 'erase') {
+    if (this.toolsManager.getTool() === 'erase') {
       this.drawing = true
 
       this.lastpos = p

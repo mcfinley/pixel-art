@@ -9,11 +9,7 @@ import ToolsManager from './modules/interface/tools-manager'
 
 import DragTool from './modules/tools/drag-tool'
 import DrawTool from './modules/tools/draw-tool'
-// import EraseTool from './modules/tools/erase-tool'
-
-/* Import miscellaneous stuff */
-
-// import HelloUser from './modules/miscellaneous/hello-user'
+import EraseTool from './modules/tools/erase-tool'
 
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.getElementById('app')
@@ -28,13 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const layersManager = new LayersManager(core, layers)
   const toolsManager = new ToolsManager(core)
-  // const tools = new ToolsPalette(core)
 
-  //
   const dragTool = new DragTool(toolsManager, events, layers)
   const drawTool = new DrawTool(toolsManager, events, layers)
-  // const eraseTool = new EraseTool(tools, events, state)
-  //
-  // const hello = new HelloUser(core)
+  const eraseTool = new EraseTool(toolsManager, events, layers)
 })
 

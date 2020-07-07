@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 import CoreModule from '@/modules/core/core-module'
 
 import { EventEmitter } from '@/utils/events'
@@ -34,7 +36,6 @@ export default class ImageLayers {
     const firstVerticalLineOffset = this.offset.x % this.zoom
     const firstHorizontalLineOffset = this.offset.y % this.zoom
 
-    context.globalAlpha = this.zoom < 2 ? 0 : ((1/10) * (this.zoom - 2) * (this.zoom - 2))
     context.strokeStyle = GRID_COLOR
 
     for (let x = 0; x < verticalLinesCount; ++x) {
@@ -87,6 +88,7 @@ export default class ImageLayers {
   updateLayers = (predicate: (layers: Layer[]) => Layer[]) => {
     this.layers = predicate(this.layers)
     this.onLayersUpdate.emitSync()
+    this.optimizeLayers()
   }
 
   updateLayer = (index, predicate: (layer: Layer) => Layer) =>
@@ -103,11 +105,37 @@ export default class ImageLayers {
     this.activeLayerIndex = index
   getActiveLayerIndex = () =>
     this.activeLayerIndex
+  getActiveLayer = () =>
+    this.layers[this.activeLayerIndex] || null
 
   updateActiveLayer = (predicate: (layer: Layer) => Layer) =>
     this.updateLayer(this.activeLayerIndex, predicate)
+
+  /**
+   * Layers optimization API
+   */
+  optimizeLayers = _.throttle(() => {
+    console.log('Perform optimizing layers pixels...')
+
+    this.layers.forEach((layer) => {
+      console.log(`Processing ${layer.name}...`)
+      let indexesToRemove: number[] = []
+
+      layer.pixels.forEach((p1, i1) => {
+        layer.pixels.slice(i1 + 1).forEach((p2, i2) => {
+          if (p1.position.x === p2.position.x && p1.position.y === p2.position.y) {
+            if (p2.color.a === 255) {
+              indexesToRemove.push(i1)
+            }
+          }
+        })
+      })
+
+      layer.pixels = layer.pixels.filter((pixel, index) =>
+        !indexesToRemove.includes(index)
+      )
+
+      console.log(`Process ${layer.name}, ${indexesToRemove.length} pixels removed.`)
+    })
+  }, 2000, { leading: true })
 }
-
-
-
-
