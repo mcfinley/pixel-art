@@ -37,8 +37,8 @@ export default class LayerPreview extends React.PureComponent<{ layer: Layer }> 
 
     return (
       <InlineWrap>
-        <LayerWindow predicate={this.generateCanvas(layer)} />
-        <LayerName>{layer.name}</LayerName>
+        <LayerWindow key={Math.random()} predicate={this.generateCanvas(layer)} />
+        <LayerName style={{ marginLeft: 12 }}>{layer.name}</LayerName>
       </InlineWrap>
     )
   }
@@ -50,13 +50,15 @@ export default class LayerPreview extends React.PureComponent<{ layer: Layer }> 
       let maxx = layer.pixels.reduce((acc, { position }) => Math.max(acc, position.x), -Infinity) + 1
       let maxy = layer.pixels.reduce((acc, { position }) => Math.max(acc, position.y), -Infinity) + 1
 
-      const pixelSize = Math.floor(Math.min(width, height) / Math.max(maxx - minx, maxy - miny))
+      const pixelSize = Math.min(width, height) / Math.max(maxx - minx, maxy - miny)
+      const offsetx = (maxx + minx) / 2
+      const offsety = (maxy + miny) / 2
 
       context.translate(width / 2 - pixelSize / 2, height / 2 - pixelSize / 2)
 
       layer.pixels.forEach(({ position, color }) => {
         context.beginPath()
-        context.rect(position.x * pixelSize, position.y * pixelSize, pixelSize, pixelSize)
+        context.rect((position.x - offsetx) * pixelSize, (position.y - offsety) * pixelSize, pixelSize, pixelSize)
         context.fillStyle = rgbaToHex(color)
         context.fill()
       })

@@ -1,5 +1,6 @@
 import CoreModule from '@/modules/core/core-module'
 
+import { EventEmitter } from '@/utils/events'
 import { Point } from '@/utils/graphic'
 import { RGBAColor, rgbaToHex } from '@/utils/colors'
 
@@ -12,7 +13,7 @@ export default class ImageLayers {
   public zoom: number = 10 /* How many real pixels fit in image pixel */
   public offset: Point = { x: 50, y: 120 }
 
-  public layers: Layer[] = [{ name: 'base', pixels: [] }]
+  private layers: Layer[] = [{ name: 'base', pixels: [] }]
 
   constructor (private core: CoreModule) {
     this.core.onRender.subscribe(this.render)
@@ -78,17 +79,33 @@ export default class ImageLayers {
   }
 
   /**
-   * Active layers features
+   * Layers read/write API
+   */
+  getLayers = () =>
+    this.layers
+
+  updateLayers = (predicate: (layers: Layer[]) => Layer[]) => {
+    this.layers = predicate(this.layers)
+    this.onLayersUpdate.emitSync()
+  }
+
+  updateLayer = (index, predicate: (layer: Layer) => Layer) =>
+    this.updateLayers((layers) => layers.map((layer, i) => i === index ? predicate(layer) : layer))
+
+  onLayersUpdate = new EventEmitter<void>()
+
+  /**
+   * Active layer feature
    */
   private activeLayerIndex: number = 0
-  setActiveLayerIndex = (index) => this.activeLayerIndex = index
-  getActiveLayerIndex = () => this.activeLayerIndex
 
-  public updateActiveLayer = (predicate) => {
-    if (this.layers[this.activeLayerIndex]) {
-      this.layers[this.activeLayerIndex] = predicate(this.layers[this.activeLayerIndex])
-    }
-  }
+  setActiveLayerIndex = (index: number) =>
+    this.activeLayerIndex = index
+  getActiveLayerIndex = () =>
+    this.activeLayerIndex
+
+  updateActiveLayer = (predicate: (layer: Layer) => Layer) =>
+    this.updateLayer(this.activeLayerIndex, predicate)
 }
 
 
