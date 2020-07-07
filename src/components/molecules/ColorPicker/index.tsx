@@ -2,7 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 
 import DialogOverlay from '../DialogOverlay'
-import Card from '../../elements/Card'
+import Card from '@/components/elements/Card'
+import GeneratedCanvas from '@/components/elements/GeneratedCanvas'
 
 import { RGBAColor, hslToRgb, rgbaToHex, hslaToRgba } from '../../../utils/colors'
 
@@ -25,33 +26,6 @@ const ColorSquare = styled.div`
 
 type Props = { value: RGBAColor, onChange: (color: RGBAColor) => void }
 type State = { dialog: { open: boolean, x: number, y: number} }
-
-class PrefilledCanvas extends React.PureComponent<any> {
-  canvasRef: HTMLCanvasElement
-  assignCanvasRef = (node: HTMLCanvasElement) => this.canvasRef = node
-
-  componentDidMount() {
-    const { width, height } = this.canvasRef.getBoundingClientRect()
-
-    this.canvasRef.width = width * 2
-    this.canvasRef.height = height * 2
-
-    const context = this.canvasRef.getContext('2d')
-
-    if (context) {
-      context.scale(2, 2)
-      this.props.fillPredicate(context, width, height)
-    }      
-  }
-
-  render () {
-    const { fillPredicate, ...props } = this.props
-
-    return (
-      <canvas {...props} ref={this.assignCanvasRef} style={{ width: '100%', height: '100%' }} />
-    )
-  }
-}
 
 export default class ColorPicker extends React.PureComponent<Props, State> {
   state = { dialog: { open: false, x: 0, y: 0 } }
@@ -111,11 +85,11 @@ export default class ColorPicker extends React.PureComponent<Props, State> {
           <DialogOverlay x={dialog.x} y={dialog.y} onClose={this.closeDialog}>
             <Card noShadow style={{ width: 200 }}>
               <div style={{ width: '100%', height: '30px' }}>
-                <PrefilledCanvas fillPredicate={this.fillHue} onClick={this.pickColor} />
+                <GeneratedCanvas predicate={this.fillHue} onClick={this.pickColor} />
               </div>
 
               <div style={{ width: '100%', height: '100px' }}>
-                <PrefilledCanvas fillPredicate={this.fillRest(1)} />
+                <GeneratedCanvas predicate={this.fillRest(1)} />
               </div>
 
               <div style={{ padding: 20 }}>
