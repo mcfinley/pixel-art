@@ -65,11 +65,10 @@ type Props = {
 
 export default class Palette extends React.PureComponent<Props> {
   pickColor = (v) => this.props.onChangeColor(v)
-  stopPropagation = (e) => { e.prefentDefault(); e.stopPropagation(); e.nativeEvent.stopPropagation(); }
 
   render () {
     return (
-      <LeftSideContainer onClick={this.stopPropagation}>
+      <LeftSideContainer>
         <Card style={{ marginLeft: 12, padding: '12px 6px' }}>
           <Tools>
             <IconContext.Provider value={{ color: '#069', size: '20px' }}>

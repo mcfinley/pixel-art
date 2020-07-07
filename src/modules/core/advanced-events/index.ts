@@ -22,7 +22,11 @@ export default class AdvancedEvents {
   private mousepressed = false
 
   constructor (private core: CoreModule) {
-    this.core.root.addEventListener('mousedown', (e) => {
+    this.core.interface.addEventListener('mousedown', (e) => {
+      if (e.target !== this.core.interface) {
+        return
+      }
+
       const { clientX: x, clientY: y } = e
 
       this.lastmousepos = { x, y }
@@ -32,7 +36,11 @@ export default class AdvancedEvents {
       // console.log('onMouseDown', { x, y })
     })
 
-    this.core.root.addEventListener('mousemove', (e) => {
+    this.core.interface.addEventListener('mousemove', (e) => {
+      if (e.target !== this.core.interface) {
+        return
+      }
+
       const { clientX: x, clientY: y } = e
 
       if (this.mousepressed) {
@@ -47,7 +55,11 @@ export default class AdvancedEvents {
       // console.log('onMouseMove', { x, y })
     })
 
-    this.core.root.addEventListener('mouseup', (e) => {
+    this.core.interface.addEventListener('mouseup', (e) => {
+      if (e.target !== this.core.interface) {
+        return
+      }
+
       const { clientX: x, clientY: y } = e
 
       if (this.mousepressed) {
@@ -65,7 +77,11 @@ export default class AdvancedEvents {
       // console.log('onMouseUp', { x, y })
     })
 
-    this.core.root.addEventListener('mousewheel', (e: any) => {
+    this.core.interface.addEventListener('mousewheel', (e: any) => {
+      if (e.target !== this.core.interface) {
+        return
+      }
+      
       const { clientX: x, clientY: y } = e
 
       this.onZoom.emitSync({ x, y, delta: e.deltaY })
