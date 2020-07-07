@@ -42,8 +42,8 @@ export default class LayersManager extends React.PureComponent<Props> {
             <strong>{layers.length}</strong>
           </ManagerHeading>
 
-          {layers.map((layer) => (
-            <LayerPreview layer={layer} />
+          {layers.map((layer, index) => (
+            <LayerPreview key={index} layer={layer} />
           ))}
         </Card>
       </BottomCenterContainer>

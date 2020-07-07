@@ -12,7 +12,7 @@ export default class ImageLayers {
   public zoom: number = 10 /* How many real pixels fit in image pixel */
   public offset: Point = { x: 50, y: 120 }
 
-  private layers: Layer[] = []
+  public layers: Layer[] = [{ name: 'base', pixels: [] }]
 
   constructor (private core: CoreModule) {
     this.core.onRender.subscribe(this.render)
@@ -20,6 +20,7 @@ export default class ImageLayers {
 
   render = (context: CanvasRenderingContext2D) => {
     this.renderGrid(context)
+    this.renderLayers(context)
   }
 
   /**
@@ -74,6 +75,19 @@ export default class ImageLayers {
     })
 
     context.translate(-this.offset.x, -this.offset.y)
+  }
+
+  /**
+   * Active layers features
+   */
+  private activeLayerIndex: number = 0
+  setActiveLayerIndex = (index) => this.activeLayerIndex = index
+  getActiveLayerIndex = () => this.activeLayerIndex
+
+  public updateActiveLayer = (predicate) => {
+    if (this.layers[this.activeLayerIndex]) {
+      this.layers[this.activeLayerIndex] = predicate(this.layers[this.activeLayerIndex])
+    }
   }
 }
 

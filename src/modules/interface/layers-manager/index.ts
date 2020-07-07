@@ -1,20 +1,18 @@
 import CoreModule from '@/modules/core/core-module'
+import ImageLayers from '@/modules/core/image-layers'
 
 import LayersManagerView from '@/components/organisms/LayersManager'
 import { reactize } from '@/utils/reactize'
 
 export default class LayersManager {
-  constructor (private core: CoreModule) {
+  constructor (private core: CoreModule, private layers: ImageLayers) {
     this.core.onInitInterface.subscribe(this.setupInterface)
   }
 
+  private instance: any = null
   setupInterface = (root: HTMLElement) => {
-    reactize(LayersManagerView, root, {
-      layers: [
-        { name: 'test', pixels: [
-          { position: { x: 0, y: 0 }, color: { r: 255, g: 255, b: 0, a: 255 }}
-        ]}
-      ]
+    this.instance = reactize(LayersManagerView, root, {
+      layers: this.layers.layers
     })
   }
 }
