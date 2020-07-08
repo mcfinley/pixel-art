@@ -35,8 +35,6 @@ export default class LayerPreview extends React.PureComponent<{ layer: Layer }> 
   render () {
     const { layer } = this.props
 
-    console.log(layer.pixels.length)
-
     return (
       <InlineWrap>
         <LayerWindow key={Math.random()} predicate={this.generateCanvas(layer)} />

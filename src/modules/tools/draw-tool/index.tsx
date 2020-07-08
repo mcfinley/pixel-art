@@ -9,22 +9,33 @@ import ImageLayers from '@/modules/core/image-layers'
 import AdvancedEvents from '@/modules/core/advanced-events'
 import ToolsManager from '@/modules/interface/tools-manager'
 
-export default class DragTool {
-  constructor (private toolsManager: ToolsManager, private events: AdvancedEvents, private layers: ImageLayers) {
+/**
+ * Draw Tool - used to put pixels on layers
+ */
+export default class DrawTool {
+  constructor (
+    private toolsManager: ToolsManager, private events: AdvancedEvents, private layers: ImageLayers
+  ) {
+    /* Add a tool to tools manager */
     this.toolsManager.onInitTools.subscribe(() => ({ icon: <MdBrush />, id: 'draw' }))
 
+    /* Handle events to actually draw */
     this.events.onMouseDown.subscribe(this.handleMouseDown)
     this.events.onMouseMove.subscribe(this.handleMouseMove)
     this.events.onMouseUp.subscribe(this.handleMouseUp)
   }
 
-  getPixelPosition = (mousePosition: Point) => {
-    const x = Math.floor((mousePosition.x - this.layers.offset.x) / this.layers.zoom)
-    const y = Math.floor((mousePosition.y - this.layers.offset.y) / this.layers.zoom)
+  /**
+   * Transform coords from mouse to in-app
+   */
+  pixelPositionFromMousePosition = (mousePosition: Point) => ({
+    x: Math.floor((mousePosition.x - this.layers.offset.x) / this.layers.zoom),
+    y: Math.floor((mousePosition.y - this.layers.offset.y) / this.layers.zoom),
+  })
 
-    return { x, y }
-  }
-
+  /**
+   * Pixels manipulations API
+   */
   addPixel = (position: Point, color: RGBAColor, tags: string[] = []) =>
     this.layers.updateActiveLayer((layer) => ({
       ...layer, pixels: layer.pixels.concat([{ position, color, tags }])
@@ -35,43 +46,34 @@ export default class DragTool {
       ...layer, pixels: layer.pixels.filter(filterPredicate)
     }))
 
-  // colorPixel = (p: Point) =>
-
-  // private placeholderPixel: Point | null = null
-  // setPlaceholderPixel = (p: Point) => {
-  //   if (p !== this.placeholderPixel) {
-  //     this.filterPixels(({ tags }) => !tags.includes('draw-placeholder'))
-  //     this.addPixel(this.getPixelPosition(p), { r: 200, g: 200, b: 200, a: 255 })
-  //     this.placeholderPixel = p
-  //   }
-  // }
-
+  /**
+   * Events handling code
+   */
   private drawing = false
   private lastpos: Point | null = null
+
   handleMouseDown = (p: Point) => {
     if (this.toolsManager.getTool() === 'draw') {
       this.drawing = true
-
       this.lastpos = p
-      this.addPixel(this.getPixelPosition(p), this.toolsManager.getColor())
+
+      this.addPixel(this.pixelPositionFromMousePosition(p), this.toolsManager.getColor())
     }
   }
 
   handleMouseMove = (p: Point) => {
     if (this.drawing) {
-      /* Build a line of all pixels between */
       if (this.lastpos) {
-        pixelizeLine({ from: this.lastpos, to: p }).forEach((p) => {
-          this.addPixel(this.getPixelPosition(p), this.toolsManager.getColor())
+        pixelizeLine({
+          from: this.pixelPositionFromMousePosition(this.lastpos),
+          to: this.pixelPositionFromMousePosition(p),
+        }).forEach((p) => {
+          this.addPixel(p, this.toolsManager.getColor())
         })
       }
 
       this.lastpos = p
     }
-
-    // if (this.toolsManager.getTool() === 'draw') {
-    //   this.setPlaceholderPixel(p)
-    // }
   }
 
   handleMouseUp = (p: Point) => {
