@@ -22,18 +22,19 @@ const ColorSquare = styled.div`
   }
 ` as any
 
-// console.log(hslaToRgba({ h: .3, s: 1, l: .5, a: 1}))
-
 type Props = { value: RGBAColor, onChange: (color: RGBAColor) => void }
 type State = { dialog: { open: boolean, x: number, y: number }, hue: number }
 
+/**
+ * Color Picker class
+ */
 export default class ColorPicker extends React.PureComponent<Props, State> {
   state = { dialog: { open: false, x: 0, y: 0 }, hue: 0 }
 
   openDialog = (e) =>
     this.setState({ dialog: { open: true, x: e.clientX + 10, y: e.clientY + 10 } })
 
-  closeDialog = (e) =>
+  closeDialog = () =>
     this.setState({ dialog: { open: false, x: 0, y: 0 } })
 
   fillHue = (context: CanvasRenderingContext2D, width: number, height: number) => {
@@ -82,8 +83,8 @@ export default class ColorPicker extends React.PureComponent<Props, State> {
     const x = (e.clientX - rect.left) / rect.width
     const y = (e.clientY - rect.top) / rect.height
 
-    // this.setState({ hue })
     this.props.onChange(hslaToRgba({ h: hue, s: x, l: 1-y, a: 1}))
+    this.closeDialog()
   }
 
   render () {
@@ -93,9 +94,12 @@ export default class ColorPicker extends React.PureComponent<Props, State> {
     return (
       <>
         <ColorSquare color={rgbaToHex(value)} onClick={this.openDialog} />
+
         {dialog.open && (
           <DialogOverlay x={dialog.x} y={dialog.y} onClose={this.closeDialog}>
-            <Card noShadow style={{ width: 200 }}>
+            <Card noShadow style={{ width: 200, height: 165 }}>
+              <h4 style={{ padding: 8, margin: 0 }}>Color</h4>
+
               <GeneratedCanvas style={{ width: '100%', height: '30px' }} predicate={this.fillHue} onClick={this.changeHue} />
               <GeneratedCanvas key={this.state.hue} style={{ width: '100%', height: '100px' }} predicate={this.fillRest(this.state.hue)} onClick={this.pickColor} />
             </Card>
